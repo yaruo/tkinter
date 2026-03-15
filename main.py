@@ -37,6 +37,9 @@ def init():
         x = random.random() * W
         y = random.random() * H
         demon = sprite.DemonSprite(cvs, x, y, 20)
+        spd = random.randint(1, 4)
+        deg = random.randint(0, 360)
+        demon.move(spd, deg)
         demons.append(demon)
 
 def update():
@@ -51,7 +54,7 @@ def update():
     # 鬼軍団
     for demon in demons:
         demon.update(cvs)
-        
+
     # 画面更新
     root.after(F_INTERVAL, update)
 
