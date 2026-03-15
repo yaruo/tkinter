@@ -62,6 +62,13 @@ def update():
 def on_mouse_clicked(e):
     print("Clicked:", e.x, e.y)
 
+    # 鬼軍団
+    for demon in demons:
+        if demon.is_dead(): continue
+        if demon.is_hit(e.x, e.y):
+            demon.die(cvs)
+            break
+
 def on_mouse_moved(e):
     global mx, my
     mx, my = e.x, e.y

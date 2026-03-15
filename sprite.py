@@ -11,6 +11,7 @@ class DemonSprite:
         self.r = r
         self.vx = 0
         self.vy = 0
+        self.dead = False
         # 円
         self.oval = cvs.create_oval(x - r, y - r, x + r, y + r,
                                     fill = "white", width = 0)
@@ -39,3 +40,18 @@ class DemonSprite:
 
     def set_y(self, y):
         self.y = y
+
+    def die(self, cvs):
+        self.dead = True
+        self.stop()
+        # 円の色を更新
+        cvs.itemconfig(self.oval, fill = "red")
+    
+    def is_dead(self):
+        return self.dead # 死亡フラグを返す
+    
+    def is_hit(self, x, y):
+        dist_x = (self.x - x) ** 2
+        dist_y = (self.y - y) ** 2
+        dist = (dist_x + dist_y) ** 0.5
+        return dist < self.r
