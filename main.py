@@ -6,12 +6,18 @@ W, H = 480, 320
 F_RATE = 30 # 1 秒間に実行するフレーム回数
 F_INTERVAL = int(1000/ F_RATE) # 1 フレームの間隔
 
-# 背景画像とイメージ（グローバル変数）
+# フォント
+FONT = ("Arial", 16)
+
+# マウスの座標
+mx, my = 0, 0
+
+# 背景画像とイメージ
 bg_photo, bg_image = None, None
 
 def init():
     """ 初期化関数 """
-    global bg_image, bg_photo # グローバル変数を指定
+    global bg_image, bg_photo
 
     # 背景
     bg_photo = tkinter.PhotoImage(file = "images/bg_jigoku.png")
@@ -19,17 +25,34 @@ def init():
 
 def update():
     """ 更新関数 """
+    cvs.delete("hud") # "hud"タグの描画オブジェクトを消去
+
+    # マウス座標を描画
+    msg = "x:{}, y:{}".format(mx, my)
+    cvs.create_text(mx, my, text=msg,
+                    fill="white", font=FONT, tag="hud")
+    
     # 画面更新
     root.after(F_INTERVAL, update)
+
+def on_mouse_clicked(e):
+    print("Clicked:", e.x, e.y)
+
+def on_mouse_moved(e):
+    global mx, my
+    mx, my = e.x, e.y
 
 # Tkinter
 root = tkinter.Tk()
 root.title("Hello, Tkinter!")
 root.resizable(False, False)
+root.bind("<Button>", on_mouse_clicked) # マウス(Click)
+root.bind("<Motion>", on_mouse_moved) # マウス(Motion)
+
 
 # キャンバス
-cvs = tkinter.Canvas(width = W, height = H, bg = "black") # キャンバスを作る
-cvs.pack() # キャンバスを配置する
-init() # 初期化巻子を実行
-update() # 更新関数を実行
-root.mainloop() # tkinter を起動する
+cvs = tkinter.Canvas(width = W, height = H, bg = "black")
+cvs.pack()
+init()
+update()
+root.mainloop()
