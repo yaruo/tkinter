@@ -33,3 +33,9 @@ class DemonSprite:
 
     def stop(self):
         self.move(0, 0)
+
+    def set_x(self, x):
+        self.x = x
+
+    def set_y(self, y):
+        self.y = y

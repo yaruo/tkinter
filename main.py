@@ -53,6 +53,7 @@ def update():
     
     # 鬼軍団
     for demon in demons:
+        overlap_area(demon)
         demon.update(cvs)
 
     # 画面更新
@@ -65,6 +66,12 @@ def on_mouse_moved(e):
     global mx, my
     mx, my = e.x, e.y
 
+def overlap_area(obj):
+    if obj.x < 0: obj.set_x(W)
+    if W < obj.x: obj.set_x(0)
+    if obj.y < 0: obj.set_y(H)
+    if H < obj.y: obj.set_y(0)
+    
 # Tkinter
 root = tkinter.Tk()
 root.title("Hello, Tkinter!")
