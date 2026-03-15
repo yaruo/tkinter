@@ -1,3 +1,6 @@
+import math
+import random
+import sprite
 import tkinter
 
 W, H = 480, 320
@@ -15,6 +18,12 @@ mx, my = 0, 0
 # 背景画像とイメージ
 bg_photo, bg_image = None, None
 
+# 鬼軍団の数
+TOTAL_DEMONS = 10
+
+# 鬼軍団
+demons = []
+
 def init():
     """ 初期化関数 """
     global bg_image, bg_photo
@@ -22,6 +31,13 @@ def init():
     # 背景
     bg_photo = tkinter.PhotoImage(file = "images/bg_jigoku.png")
     bg_image = cvs.create_image(W / 2, H / 2, image = bg_photo)
+
+    # 鬼軍団
+    for i in range(TOTAL_DEMONS):
+        x = random.random() * W
+        y = random.random() * H
+        demon = sprite.DemonSprite(cvs, x, y, 20)
+        demons.append(demon)
 
 def update():
     """ 更新関数 """
@@ -32,6 +48,10 @@ def update():
     cvs.create_text(mx, my, text=msg,
                     fill="white", font=FONT, tag="hud")
     
+    # 鬼軍団
+    for demon in demons:
+        demon.update(cvs)
+        
     # 画面更新
     root.after(F_INTERVAL, update)
 
