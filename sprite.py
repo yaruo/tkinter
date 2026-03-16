@@ -15,6 +15,17 @@ class DemonSprite:
         # 円
         self.oval = cvs.create_oval(x - r, y - r, x + r, y + r,
                                     fill = "white", width = 0)
+        
+        # r, g, bからランダムで一つ選ぶ
+        self.type = random.choice(("r", "g", "b"))
+
+        file_alive = "images/dmn_alive_{}.png".format(self.type)
+        self.photo_alive = tkinter.PhotoImage(file = file_alive)
+
+        file_dead = "images/dmn_dead_{}.png".format(self.type)
+        self.photo_dead = tkinter.PhotoImage(file = file_dead)
+
+        self.image = cvs.create_image(x, y, image = self.photo_alive)
     
     def update(self, cvs):
 
@@ -26,6 +37,9 @@ class DemonSprite:
         cvs.coords(self.oval,
                    self.x - self.r, self.y - self.r,
                    self.x + self.r, self.y + self.r,)
+        
+        # イメージの座標を更新
+        cvs.coords(self.image, self.x, self.y)
         
     def move(self, spd, deg):
         radian = deg * math.pi / 180
@@ -46,6 +60,8 @@ class DemonSprite:
         self.stop()
         # 円の色を更新
         cvs.itemconfig(self.oval, fill = "red")
+        # イメージの画像を更新
+        cvs.itemconfig(self.image, image = self.photo_dead)
     
     def is_dead(self):
         return self.dead # 死亡フラグを返す
