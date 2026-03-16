@@ -24,6 +24,9 @@ TOTAL_DEMONS = 10
 # 鬼軍団
 demons = []
 
+# 鬼カウンター
+counter = TOTAL_DEMONS
+
 def init():
     """ 初期化関数 """
     global bg_image, bg_photo
@@ -51,6 +54,10 @@ def update():
     cvs.create_text(mx, my, text=msg,
                     fill="white", font=FONT, tag="hud")
     
+    # 鬼カウンターを描画
+    msg = "残り鬼数: {}".format(counter)
+    cvs.create_text(20, 20, text = msg,
+                    fill = "white", font = FONT, tag = "hud", anchor="nw")
     # 鬼軍団
     for demon in demons:
         overlap_area(demon)
@@ -60,6 +67,7 @@ def update():
     root.after(F_INTERVAL, update)
 
 def on_mouse_clicked(e):
+    global counter
     print("Clicked:", e.x, e.y)
 
     # 鬼軍団
@@ -67,6 +75,7 @@ def on_mouse_clicked(e):
         if demon.is_dead(): continue
         if demon.is_hit(e.x, e.y):
             demon.die(cvs)
+            counter = counter - 1
             break
 
 def on_mouse_moved(e):
