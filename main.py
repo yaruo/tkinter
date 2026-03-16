@@ -27,6 +27,9 @@ demons = []
 # 鬼カウンター
 counter = TOTAL_DEMONS
 
+# タイマー
+timer = F_RATE * 10
+
 def init():
     """ 初期化関数 """
     global bg_image, bg_photo
@@ -47,6 +50,8 @@ def init():
 
 def update():
     """ 更新関数 """
+    global timer
+
     cvs.delete("hud") # "hud"タグの描画オブジェクトを消去
 
     # マウス座標を描画
@@ -58,13 +63,28 @@ def update():
     msg = "残り鬼数: {}".format(counter)
     cvs.create_text(20, 20, text = msg,
                     fill = "white", font = FONT, tag = "hud", anchor="nw")
+    
+    # タイマーを描画
+    msg = "残り時間: {:.2f}".format(timer / F_RATE)
+    cvs.create_text(W-20, 20, text = msg,
+                    fill = "white", font = FONT, tag = "hud", anchor="ne")
+
     # 鬼軍団
     for demon in demons:
         overlap_area(demon)
         demon.update(cvs)
 
+    # タイマー
+    timer = timer - 1
+
     # 画面更新
-    root.after(F_INTERVAL, update)
+    if 0 < counter and 0 <= timer:
+        root.after(F_INTERVAL, update)
+    else:
+        # ゲーム判定
+        msg = "GAME CLEAR" if counter <= 0 else "GAME OVER"
+        cvs.create_text(W / 2, H - 40, text = msg,
+                        fill = "white", font = FONT, tag = "hud")
 
 def on_mouse_clicked(e):
     global counter
